@@ -1,20 +1,28 @@
-#include "stdafx.h"
 
 #include "Platform.h"
+#include "namaste\GlslProgram.h"
+#include "namaste\ResourceManager.h"
 
 // references: 
 // setting up a basic window: http://www.winprog.org/tutorial/simple_window.html
 // adding an OpenGL context: http://www.alsprogrammingresource.com/win32_tut06.html
 // reading application time: http://advancedcppwithexamples.blogspot.com/2009/08/measuring-elapsed-time-in-c-using_22.html
+// creating a .gitignore: http://blog.technicallyliving.com/2013/11/creating-a-gitignore-file-in-windows/
 
 HWND gWnd;			// window handle
-HDC gDc;			// device context
-HGLRC gGlrc;		// rendering context
+HDC gDc;			// device context - an interface to the hardware
+HGLRC gGlrc;		// rendering context - used when drawing to the output device
 RECT screenRect;
 RECT clientRect;
 
 bool CreateGlContext(HWND hWnd, HDC &hDc, HGLRC &hGlrc)
 {
+	/*
+	The important things to note here are:
+	dwFlags: enables OpenGL support and double buffering
+	cColorBits: sets the precision of the color buffer
+	cDepthBits: sets the precision of the depth buffer
+	*/
 	static PIXELFORMATDESCRIPTOR pfd;
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
 	pfd.nVersion = 1;
@@ -33,7 +41,7 @@ bool CreateGlContext(HWND hWnd, HDC &hDc, HGLRC &hGlrc)
 	pfd.cAccumGreenBits = 0;
 	pfd.cAccumBlueBits = 0;
 	pfd.cAccumAlphaBits = 0;
-	pfd.cDepthBits = 0;
+	pfd.cDepthBits = 16;
 	pfd.cStencilBits = 0;
 	pfd.cAuxBuffers = 0;
 	pfd.iLayerType = PFD_MAIN_PLANE;
@@ -42,8 +50,10 @@ bool CreateGlContext(HWND hWnd, HDC &hDc, HGLRC &hGlrc)
 	pfd.dwVisibleMask = 0;
 	pfd.dwDamageMask = 0;
 
+	// get the device context associated with this window
 	hDc = GetDC(hWnd);
 
+	// request a pixel format
 	int pixelFormat = ChoosePixelFormat(hDc, &pfd);
 
 	if (!pixelFormat)
@@ -58,8 +68,9 @@ bool CreateGlContext(HWND hWnd, HDC &hDc, HGLRC &hGlrc)
 		return false;
 	}
 
+	// use the device context to create a rendering context
 	hGlrc = wglCreateContext(hDc);
-
+	
 	if (!hGlrc)
 	{
 		MessageBox(0, TEXT("Can't create GL rendering context"), TEXT("Error"), MB_OK | MB_ICONERROR);
@@ -72,15 +83,60 @@ bool CreateGlContext(HWND hWnd, HDC &hDc, HGLRC &hGlrc)
 		return false;
 	}
 
+	// initialize GLEW
+	glewExperimental = GL_TRUE;
+	glewInit();
+	glGetError();
+
 	return true;
 }
 
 void ReleaseGlContext(HWND hWnd, HDC &hDc, HGLRC &hGlrc)
 {
-	ChangeDisplaySettings(NULL, 0);
-	wglMakeCurrent(hDc, NULL);
-	wglDeleteContext(hGlrc);
+	ChangeDisplaySettings(NULL, 0);		// restore the original display settings
+	wglMakeCurrent(hDc, NULL);			// deselect the rendering context
+	wglDeleteContext(hGlrc);			// delete the rendering context
 	ReleaseDC(hWnd, hDc);
+}
+
+void ResizeGlScene(GLint width, GLint height)
+{
+	glViewport(0, 0, width, height);
+}
+
+GlslProgram prog;
+GLuint vaoID;
+
+void InitGl()
+{
+	prog = ResourceManager::loadShader("C:\\Users\\michael.walczyk\\Documents\\Namaste\\resources\\basic.vert", "C:\\Users\\michael.walczyk\\Documents\\Namaste\\resources\\basic.frag");
+	
+	GLfloat vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f,  0.5f, 0.0f
+	};
+
+	GLuint vboID;
+    vaoID;
+	
+	// unbinding buffers: http://gamedev.stackexchange.com/questions/90471/should-unbind-buffers
+	glGenBuffers(1, &vboID);
+	glGenVertexArrays(1, &vaoID);
+
+	glBindVertexArray(vaoID);
+		
+		// pass the data to the GPU
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		
+		// attribute 0 -> position
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+		glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 /*
@@ -96,12 +152,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (CreateGlContext(hWnd, gDc, gGlrc))
 		{
 			GetClientRect(hWnd, &clientRect);
-			//InitGL(clientRect.right, clientRect.bottom);
+		}
+		else
+		{
+			PostQuitMessage(0);
 		}
 		break;
 	case WM_SIZE:
 		GetClientRect(hWnd, &clientRect);
-		// ResizeGlScene(clientRect.right, clientRect.bottom);
+		ResizeGlScene(clientRect.right, clientRect.bottom);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+		case VK_SPACE:
+		case VK_RETURN:
+			// don't call PostQuitMessage(0) here because that should only happen in one place (WM_CLOSE)
+			SendMessage(hWnd, WM_CLOSE, 0, 0);
+			break;
+		}
 		break;
 	case WM_QUIT:
 	case WM_CLOSE:
@@ -163,6 +233,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevious, LPSTR lpCmdLine, in
 		return 0;
 	}
 
+	/*
+	Clear the error state for each of the C++ standard stream objects. We need to do this, as
+	attempts to access the standard streams before they refer to a valid target will cause the
+	iostream objects to enter an error state. In versions of Visual Studio after 2005, this seems
+	to always occur during startup regardless of whether anything has been read from or written to
+	the console or not.
+	*/
+	AllocConsole();
+	freopen("CONIN$", "r", stdin);
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
+	std::wcout.clear();
+	std::cout.clear();
+	std::wcerr.clear();
+	std::cerr.clear();
+	std::wcin.clear();
+	std::cin.clear();
+
+	InitGl();
+
 	// update the window 
 	ShowWindow(gWnd, nCmdShow);
 	UpdateWindow(gWnd);
@@ -176,7 +266,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevious, LPSTR lpCmdLine, in
 		message. TranslateMessage() does some additional processing on keyboard events. DispatchMessage() sends the
 		message out to the window that the message was sent to.
 		*/
-		while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
+		while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))	// checks if any messages are available but does not remove them from the queue
 		{
 			if (GetMessage(&msg, NULL, 0, 0))
 			{
@@ -194,21 +284,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevious, LPSTR lpCmdLine, in
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-		glBegin(GL_TRIANGLES);
 
-		// vertex 1
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glVertex2f(-0.5f, 0.0f);
+		prog.bind();
+		prog.setUniform1f("uTime", startTime * 0.001f);
+		glBindVertexArray(vaoID);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		// vertex 2
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex2f(0.5f, 0.0f);
+		prog.unbind();
 
-		// vertex 3
-		glColor3f(0.0f, 0.0f, 1.0f);
-		glVertex2f(0.2f * ypos, 0.5f);
+		//glBegin(GL_TRIANGLES);
 
-		glEnd();
+		//// vertex 1
+		//glColor3f(1.0f, 0.0f, 0.0f);
+		//glVertex2f(-0.5f, 0.0f);
+
+		//// vertex 2
+		//glColor3f(0.0f, 1.0f, 0.0f);
+		//glVertex2f(0.5f, 0.0f);
+
+		//// vertex 3
+		//glColor3f(0.0f, 0.0f, 1.0f);
+		//glVertex2f(0.2f * ypos, 0.5f);
+
+		//glEnd();
 
 		glFinish();
 		SwapBuffers(gDc);

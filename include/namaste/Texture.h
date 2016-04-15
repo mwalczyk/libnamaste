@@ -1,38 +1,33 @@
 #pragma once
 
-#include <GL\glew.h>
-#include <memory>
+#include "../Namaste/Platform.h"
 
-namespace breakout {
+class Texture;
+using TextureRef = std::shared_ptr<Texture>;
 
-	class Texture;
-	using TextureRef = std::shared_ptr<Texture>;
+class Texture
+{
+public:
+	Texture();
+	~Texture();
 
-	class Texture
+	static inline TextureRef create()
 	{
-	public:
-		Texture();
-		~Texture();
+		return TextureRef(new Texture);
+	}
 
-		static inline TextureRef create()
-		{
-			return TextureRef(new Texture);
-		}
+	void generate(GLuint aWidth, GLuint aHeight, unsigned char *data);
+	void bind() const;
+	void unbind() const;
 
-		void generate(GLuint aWidth, GLuint aHeight, unsigned char *data);
-		void bind() const;
-		void unbind() const;
-
-		GLuint texId;
-		GLuint width;
-		GLuint height;
-		GLuint internalFormat;
-		GLuint imageFormat;
-		GLuint wrapS;
-		GLuint wrapT;
-		GLuint filterMin;
-		GLuint filterMax;
-	private:
-	};
-
-} // namespace breakout
+	GLuint texId;
+	GLuint width;
+	GLuint height;
+	GLuint internalFormat;
+	GLuint imageFormat;
+	GLuint wrapS;
+	GLuint wrapT;
+	GLuint filterMin;
+	GLuint filterMax;
+private:
+};
