@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Namaste/Platform.h"
+#include "Platform.h"
 
 class Texture;
 using TextureRef = std::shared_ptr<Texture>;

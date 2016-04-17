@@ -18,7 +18,7 @@ GlslProgram ResourceManager::loadShaderFromFile(const GLchar *vertFile, const GL
 
 	try
 	{
-		// Open files
+		// open files
 		std::ifstream vertexShaderFile(vertFile);
 		std::ifstream fragmentShaderFile(fragFile);
 		if (!vertexShaderFile.is_open()) {
@@ -26,7 +26,7 @@ GlslProgram ResourceManager::loadShaderFromFile(const GLchar *vertFile, const GL
 		}
 		std::stringstream vertSS, fragSS;
 
-		// Read file's buffer contents into streams
+		// read file's buffer contents into streams
 		vertSS << vertexShaderFile.rdbuf();
 		fragSS << fragmentShaderFile.rdbuf();
 
@@ -34,11 +34,11 @@ GlslProgram ResourceManager::loadShaderFromFile(const GLchar *vertFile, const GL
 		vertexShaderFile.close();
 		fragmentShaderFile.close();
 
-		// Convert stream into string
+		// convert stream into string
 		vertexCode = vertSS.str();
 		fragmentCode = fragSS.str();
 
-		// If geometry shader path is present, also load a geometry shader
+		// load a geometry shader (optional)
 		if (geomFile != nullptr)
 		{
 			std::ifstream geometryShaderFile(geomFile);

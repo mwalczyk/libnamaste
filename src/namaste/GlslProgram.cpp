@@ -14,19 +14,19 @@ void GlslProgram::compile(const GLchar *vertSrc, const GLchar *fragSrc, const GL
 	GLuint fragId;
 	GLuint geomId;
 
-	// Vertex shader
+	// vertex shader
 	vertId = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertId, 1, &vertSrc, NULL);
 	glCompileShader(vertId);
 	checkCompileErrors(vertId, "VERTEX");
 
-	// Fragment shader
+	// fragment shader
 	fragId = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragId, 1, &fragSrc, NULL);
 	glCompileShader(fragId);
 	checkCompileErrors(fragId, "FRAGMENT");
 
-	// Geometry shader source code is optional
+	// geometry shader (optional)
 	if (geomSrc != nullptr)
 	{
 		geomId = glCreateShader(GL_GEOMETRY_SHADER);
@@ -35,6 +35,7 @@ void GlslProgram::compile(const GLchar *vertSrc, const GLchar *fragSrc, const GL
 		checkCompileErrors(geomId, "GEOMETRY");
 	}
 
+	// program object
 	programId = glCreateProgram();
 	glAttachShader(programId, vertId);
 	glAttachShader(programId, fragId);

@@ -1,13 +1,15 @@
 #pragma once
 
-#include "../Namaste/Platform.h"
+#include "Platform.h"
 
 class GlslProgram;
 using GlslProgramRef = std::shared_ptr<GlslProgram>;
 
 class GlslProgram
 {
+
 public:
+
 	GlslProgram();
 	~GlslProgram();
 
@@ -30,6 +32,9 @@ public:
 	void setUniform4x4Matrix(const std::string &uniformName, const glm::mat4 &matrix) const;
 
 	GLuint programId;
+
 private:
+
 	void checkCompileErrors(GLuint objectId, const std::string &type);
+
 };
