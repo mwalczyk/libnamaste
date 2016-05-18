@@ -38,6 +38,6 @@ float noise(vec2 uv)
 void main()
 {
   vec2 uv = gl_FragCoord.xy / vec2(600.0, 800.0);
-  float n = noise(uv * 10.0 + uTime);
+  float n = noise(uv * 40.0 + uTime);
   oColor = vec4(vec3(n), 1.0);
 }

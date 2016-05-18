@@ -7,9 +7,7 @@ using WindowRef = std::shared_ptr<Window>;
 
 class Window
 {
-
 public:
-
 	Window(HINSTANCE hInstance, int nCmdShow, bool showConsole = true);
 	~Window();
 
@@ -19,9 +17,7 @@ public:
 	}
 
 	HWND getHandle() const { return mWnd; };
-
 private:
-
 	int registerWindow();
 	int createWindow(int nCmdShow);
 	void createConsole();
@@ -32,5 +28,4 @@ private:
 	HWND mWnd;				// window handle
 	HDC mDc;				// device context - an interface to the hardware
 	HGLRC mGlrc;			// rendering context - used when drawing to the output device
-
 };

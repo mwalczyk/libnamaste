@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\gl">
+      <UniqueIdentifier>{be95df4d-bd7a-4153-841b-8eaa628c2208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{e04811cb-64d6-41e3-b35c-74bb05fde9c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gl">
+      <UniqueIdentifier>{843184f1-4d09-4bfc-a867-a6ba3eed695c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{0faa1e00-ac92-4c35-8a50-e339d991f8ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,61 +36,70 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\namaste\GlslProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\namaste\ResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\namaste\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\namaste\Context.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\include\namaste\Buffer.h">
+      <Filter>Header Files\gl</Filter>
     </ClInclude>
     <ClInclude Include="..\include\namaste\Gl.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\namaste\GlslProgram.h">
+      <Filter>Header Files\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\namaste\Texture.h">
+      <Filter>Header Files\gl</Filter>
     </ClInclude>
     <ClInclude Include="..\include\namaste\Platform.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\namaste\Window.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\include\namaste\ResourceManager.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\namaste\Context.h">
+      <Filter>Header Files\gl</Filter>
     </ClInclude>
     <ClInclude Include="..\include\namaste\Scoped.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\namaste\Buffer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\include\namaste\Window.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\namaste\Vao.h">
+      <Filter>Header Files\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\namaste\GlslProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\namaste\ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\namaste\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Namaste.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\namaste\Window.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\namaste\Buffer.cpp">
+      <Filter>Source Files\gl</Filter>
     </ClCompile>
     <ClCompile Include="..\src\namaste\Context.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\gl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\namaste\Buffer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\namaste\GlslProgram.cpp">
+      <Filter>Source Files\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\namaste\Texture.cpp">
+      <Filter>Source Files\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="Namaste.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\namaste\ResourceManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\namaste\Window.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\namaste\Vao.cpp">
+      <Filter>Source Files\gl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -35,17 +35,17 @@ void GlslProgram::compile(const GLchar *vertSrc, const GLchar *fragSrc, const GL
 		checkCompileErrors(geomId, "GEOMETRY");
 	}
 
-	// program object
-	programId = glCreateProgram();
-	glAttachShader(programId, vertId);
-	glAttachShader(programId, fragId);
+	// attach shaders to the program object
+	mProgramId = glCreateProgram();
+	glAttachShader(mProgramId, vertId);
+	glAttachShader(mProgramId, fragId);
 	if (geomSrc != nullptr)
 	{
-		glAttachShader(programId, geomId);
+		glAttachShader(mProgramId, geomId);
 	}
 
-	glLinkProgram(programId);
-	checkCompileErrors(programId, "PROGRAM");
+	glLinkProgram(mProgramId);
+	checkCompileErrors(mProgramId, "PROGRAM");
 
 	// Delete the shaders as they've already been linked into the program object
 	glDeleteShader(vertId);
@@ -58,7 +58,7 @@ void GlslProgram::compile(const GLchar *vertSrc, const GLchar *fragSrc, const GL
 
 void GlslProgram::bind() const
 {
-	glUseProgram(programId);
+	glUseProgram(mProgramId);
 }
 
 void GlslProgram::unbind() const
@@ -68,49 +68,49 @@ void GlslProgram::unbind() const
 
 void GlslProgram::setUniform1i(const std::string &uniformName, GLint v) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform1i(uniformLocation, v);
 }
 
 void GlslProgram::setUniform1f(const std::string &uniformName, GLfloat v) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform1f(uniformLocation, v);
 }
 
 void GlslProgram::setUniform2f(const std::string &uniformName, GLfloat v1, GLfloat v2) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform2f(uniformLocation, v1, v2);
 }
 
 void GlslProgram::setUniform2f(const std::string &uniformName, const glm::vec2 &v) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform2f(uniformLocation, v.x, v.y);
 }
 
 void GlslProgram::setUniform3f(const std::string &uniformName, GLfloat v1, GLfloat v2, GLfloat v3) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform3f(uniformLocation, v1, v2, v3);
 }
 
 void GlslProgram::setUniform3f(const std::string &uniformName, const glm::vec3 &v) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform3f(uniformLocation, v.x, v.y, v.z);
 }
 
 void GlslProgram::setUniform4f(const std::string &uniformName, GLfloat v1, GLfloat v2, GLfloat v3, GLfloat v4) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform4f(uniformLocation, v1, v2, v3, v4);
 }
 
 void GlslProgram::setUniform4f(const std::string &uniformName, const glm::vec4 &v) const
 {
-	GLint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+	GLint uniformLocation = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLocation != -1) glUniform4f(uniformLocation, v.x, v.y, v.z, v.w);
 }
 
@@ -123,7 +123,7 @@ void GlslProgram::setUniform4x4Matrix(const std::string &uniformName, const glm:
 	* 3) Should the matrix be transposed?
 	* 4) The actual matrix data, transformed into an OpenGL-ready format
 	*/
-	GLuint uniformLoc = glGetUniformLocation(programId, uniformName.c_str());
+	GLuint uniformLoc = glGetUniformLocation(mProgramId, uniformName.c_str());
 	if (uniformLoc != -1) glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 

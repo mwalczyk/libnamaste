@@ -31,7 +31,7 @@ public:
 	void setUniform4f(const std::string &uniformName, const glm::vec4 &v) const;
 	void setUniform4x4Matrix(const std::string &uniformName, const glm::mat4 &matrix) const;
 
-	GLuint programId;
+	GLuint mProgramId;
 
 private:
 
