@@ -52,6 +52,16 @@ DWORD getElapsedSeconds()
 	return timeGetTime();
 }
 
+std::string getGlVersion()
+{
+	return (char*)glGetString(GL_VERSION);
+}
+
+std::string getGlslVersion()
+{
+	return (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+}
+
 #define DECLARE_MAIN(APP)\
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevious, LPSTR lpCmdLine, int nCmdShow) \
 { \

@@ -2,7 +2,6 @@
 
 const wchar_t *WINDOW_CLASS_NAME = TEXT("NamasteWinClass");
 
-
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	/*

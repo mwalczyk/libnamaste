@@ -72,6 +72,9 @@
     <ClInclude Include="App.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\namaste\Wrapper.h">
+      <Filter>Header Files\gl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -99,6 +102,9 @@
       <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\namaste\Vao.cpp">
+      <Filter>Source Files\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\namaste\Wrapper.cpp">
       <Filter>Source Files\gl</Filter>
     </ClCompile>
   </ItemGroup>

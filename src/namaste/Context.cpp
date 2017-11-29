@@ -81,11 +81,16 @@ bool Context::createGlContext()
 		MessageBox(0, TEXT("Can't activate GL rendering context"), TEXT("Error"), MB_OK | MB_ICONERROR);
 		return false;
 	}
-
+	
 	// initialize GLEW
 	glewExperimental = GL_TRUE;
 	glewInit();
 	glGetError();
+
+	if (GLEW_VERSION_4_5)
+	{
+		std::cout << " FUCK OFF!!!" << std::endl;
+	}
 
 	return true;
 }
